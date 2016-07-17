@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>New poll</title>
+    <title>New Poll</title>
     <script
             src="https://code.jquery.com/jquery-3.1.0.min.js"
             integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
@@ -15,14 +15,15 @@
     </style>
 </head>
 <body>
-    Do you want to subscribe to Poll {{ id }}?
+    <h1> Poll {{ id }}</h1>
+    <p>Do you want to subscribe?</p>
     <button class="yes">Yes</button> <button class="no">No</button>
 
-    <div class="email-container">
-        <label>Enter your email: </label>
-        <input id="email" type="email" />
-        <button class="subscribe">Go!</button>
-    </div>
+    <!--<div class="email-container">-->
+        <!--<label>Enter your email: </label>-->
+        <!--<input id="email" type="email" />-->
+        <!--<button class="subscribe">Go!</button>-->
+    <!--</div>-->
 
     <script>
         $('.yes').on("click", function(){
@@ -33,12 +34,12 @@
             alert("Then why are you even here.");
         });
 
-        $('.subscribe').on("click", function(){
-            var email = document.getElementById('email').value;
-            var apiURL = '/api/polls/subscribe/{{ id }}?email=' + email;
+        $('.yes').on("click", function(){
+//            var email = document.getElementById('email').value;
+            var apiURL = '/api/polls/subscribe/{{ id }}?' //email=' + email;
             $.post(apiURL)
                 .done(function(data){
-                    $('.email-container').append(data)
+                    $('body').append(data)
                 });
         })
 
