@@ -1,5 +1,7 @@
-from flask import Flask, redirect, render_template
+from flask import Flask, redirect, render_template, request, jsonify
 from flask_pymongo import PyMongo
+import json
+from bson.json_util import dumps, loads
 # from flask_sqlalchemy import SQLAlchemy
 # from flask_mail import Mail, Message
 
@@ -9,19 +11,18 @@ import config
 
 app = Flask(__name__)
 app.config.from_object(config.DevelopmentConfig)
-# db = SQLAlchemy(app)
-# mail = Mail(app)
 mongo = PyMongo(app)
 
 #
 # FRONTEND ROUTES
 #
 
+
 #  Subscribe to poll results page
 @app.route('/polls/new')
 def hello():
     # This is random enough that I don't need to check for pre-existence
-    # the ID before generating the page (for a toy app anyways)
+    # of the ID before generating the page (for a toy app anyways).
     new_poll_id = generateRandomString(32)
     new_poll_url = '/polls/' + new_poll_id
     return redirect(new_poll_url)
@@ -34,13 +35,13 @@ def new_poll(id):
 
 # Display poll results page, but only if proper secret.
 @app.route('/polls/<id>/<secret>')
-def get_poll_results(id, secret):
+def view_poll_results(id, secret):
 
     poll = mongo.db.polls.find_one_or_404({'_id': id})
-    print poll
     if secret == poll[u'secret']:
-        print poll
-    return "Good"
+        return render_template('poll_results.html', id=id), 200
+    else:
+        return "You don't belong here", 401
 
 
 #
@@ -49,8 +50,7 @@ def get_poll_results(id, secret):
 
 # User subscribes to a poll,
 # generate secret
-# ---> send user an email
-# ---> prepare row in database
+# Skipping sending user an email because of time constraints, would otherwise use sendgrid.
 @app.route('/api/polls/subscribe/<id>', methods=['POST'])
 def subscribe(id):
     secret = generateRandomString(32)
@@ -63,17 +63,36 @@ def subscribe(id):
 
     mongo.db.polls.insert(new_poll)
 
-    return secret
+    return secret, 201
 
 
+# Recording poll results.  Including GET in allowable methods for ease of testing
+@app.route('/api/polls/<id>', methods=['GET', 'POST'])
+def record_poll_results(id):
+    existing_poll = mongo.db.polls.find_one_or_404({'_id': id})
+
+    new_results = {}
+    for key in request.args:
+        new_results[key] = request.args[key]
+        existing_poll[u'results'].append(new_results)
+
+    # This is the worst way in the world to update, but... You said don't spend more than a few hours on this.
+    updated_poll = mongo.db.polls.replace_one(
+        {'_id': existing_poll[u'_id']},
+        existing_poll
+    )
+
+    print updated_poll
+
+    return "Good"
 
 
-# Recording poll results
-# -->
-
-
-# Retrieve results of a poll
-
+# not explicitly hidden behind a secret - should be in production app
+@app.route('/api/polls/<id>/results')
+def get_poll_results(id):
+    poll = mongo.db.polls.find_one_or_404({'_id': id})
+    poll = json.dumps(poll[u'results'])
+    return jsonify(poll=poll)
 
 
 if __name__ == '__main__':

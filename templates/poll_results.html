@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>New Poll</title>
+    <script
+            src="https://code.jquery.com/jquery-3.1.0.min.js"
+            integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+            crossorigin="anonymous">
+    </script>
+
+    <style>
+        .results-set {
+            border: 1px solid black;
+            margin: 0 auto;
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+<h1> Poll {{ id }} Results</h1>
+
+<div class="results">
+</div>
+
+<script>
+    // Ways to improve this:
+    //   - Don't make an AJAX call; just inject data on backend
+    //   - functional programming: use forEach/map instead of for loops
+    //   - Don't use jQuery; this could easily be done using native DOM methods
+    //   - huge security flaw: If someone knows a poll ID, they can curl the API w/o a secret.
+    $.getJSON('/api/polls/{{ id }}/results')
+        .done(function(data){
+            var results = JSON.parse(data.poll);
+            for (var i = 0; i < results.length; i++){
+                $ol = $('<ul><ul>').addClass('results-set');
+                var resultsSet = results[i];
+                for (var key in resultsSet) {
+                    $ol.append("<li>" + key + ": " + resultsSet[key] + "</li>");
+                }
+                $('.results').append($ol);
+            }
+        })
+</script>
+</body>
+</html>
