@@ -1,5 +1,5 @@
 Requirements:
-* Python
+* Python 2
 * [VirtualEnvWrapper](http://virtualenvwrapper.readthedocs.io/en/latest/)
 * MongoDB - `brew install mongodb`
 
@@ -19,7 +19,10 @@ Begin a new poll: http://localhost:5000/polls/new.  If you
 subscribe, the page will give you directions for API poll 
 result recording and viewing said poll results.
 
-Issues:
-* Needs error handling, particularly in API routes.
+Issues/potential improvements:
+* Needs more/better error handling, particularly in API routes.
 * Email requirement unmet.
 * Using unminified static assets.
+* Not mobile-friendly.
+* Security could be drastically improved. 
+* Add PEP docstrings to all Python route functions, including explanations of paths/parameters.

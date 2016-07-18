@@ -34,8 +34,8 @@ def new_poll(id):
 # Display poll results page, but only if proper secret.
 @app.route('/polls/<id>/<secret>')
 def view_poll_results(id, secret):
-
     poll = mongo.db.polls.find_one_or_404({'_id': id})
+
     # Checking secret --> would be better done as a decorator
     if secret == poll[u'secret']:
         return render_template('poll_results.html', id=id), 200
@@ -72,15 +72,17 @@ def record_poll_results(id):
     new_results = {}
     for key in request.args:
         new_results[key] = request.args[key]
-        existing_poll[u'results'].append(new_results)
 
-    # This is the worst way in the world to update, but... You said don't spend more than a few hours on this.
+    existing_poll[u'results'].append(new_results)
+
+
+    # This is the worst/most dangerous way in the world to update.
     updated_poll = mongo.db.polls.replace_one(
         {'_id': existing_poll[u'_id']},
         existing_poll
     )
 
-    return "Good"
+    return "Good", 201
 
 
 # not explicitly hidden behind a secret - should be in production app
