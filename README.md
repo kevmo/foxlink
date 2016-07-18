@@ -20,4 +20,6 @@ subscribe, the page will give you directions for API poll
 result recording and viewing said poll results.
 
 Issues:
-* Needs error handling, particularly in API routes
+* Needs error handling, particularly in API routes.
+* Email requirement unmet.
+* Using unminified static assets.
