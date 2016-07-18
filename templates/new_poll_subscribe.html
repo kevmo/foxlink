@@ -37,8 +37,8 @@
             var apiURL = '/api/polls/subscribe/{{ id }}?' //email=' + email;
             $.post(apiURL)
                 .done(function(secret){
-                    var api_url = "<p>Send GET and POST requests to this API URL to record query parameters:  http://localhost:5000/api/polls/{{ id }}</p>"
-                    var url = "<p>Go here to view results: http://localhost:5000/polls/{{ id }}/" + secret + "</p>";
+                    var api_url = "<h3>Send GET and POST requests to this API URL to record query parameters:</h3><br />  http://localhost:5000/api/polls/{{ id }}";
+                    var url = "<h3>Go here to view results: </h3><br/>http://localhost:5000/polls/{{ id }}/" + secret;
                     $('.subscribed').append(api_url, "<br />", url)
                 });
         })
