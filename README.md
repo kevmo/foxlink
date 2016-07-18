@@ -3,13 +3,16 @@ Requirements:
 * [VirtualEnvWrapper](http://virtualenvwrapper.readthedocs.io/en/latest/)
 * MongoDB - `brew install mongodb`
 
-1) Set up environment & install required Python packages.
+0) Set up environment & install required Python packages.
 `mkvirtualenv foxlink`
 `workon foxlink`
 `pip install -r requirements.txt`
 
-2) Start a MongoDB database
+1) Start a MongoDB database
 `brew services start mongodb`
+
+2) Install front-end packages
+`bower install`
 
 3) Launch from home dir.
 `python app.py`
@@ -24,5 +27,5 @@ Issues/potential improvements:
 * Email requirement unmet.
 * Using unminified static assets.
 * Not mobile-friendly.
-* Security could be drastically improved. 
+* Security could be drastically improved.
 * Add PEP docstrings to all Python route functions, including explanations of paths/parameters.
