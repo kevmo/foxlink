@@ -13,39 +13,46 @@
             rel="stylesheet"
             href="/static/style.css"
     />
-
-    <style>
-        .results-set {
-            border: 1px solid black;
-            margin: 0 auto;
-            width: 50%;
-        }
-    </style>
 </head>
+
 <body>
-<h1> Poll {{ id }} Results</h1>
+    <div class="title">
+        <h1 > Poll {{ id }} Results</h1>
+    </div>
 
-<div class="results">
-</div>
+    <div class="content results">
+        <h2 class="total">Total # Results: </h2>
+    </div>
 
-<script>
-    // Ways to improve this:
-    //   - Don't make an AJAX call; just inject data on backend
-    //   - functional programming: use forEach/map instead of for loops
-    //   - Don't use jQuery; this could easily be done using native DOM methods
-    //   - huge security flaw: If someone knows a poll ID, they can curl the API w/o a secret.
-    $.getJSON('/api/polls/{{ id }}/results')
-        .done(function(data){
+    <script>
+        // Ways to improve code in this script tag:
+        //   - Don't make an AJAX call; just inject data on backend
+        //   - functional programming: use forEach/map instead of for loops
+        //   - Don't use jQuery; this could easily be done using native DOM methods
+        //   - huge security flaw: If someone knows a poll ID, they can curl the API w/o a secret.
+
+        function addTotalToPage(num) {
+            $('.total').append(num);
+        }
+
+        function addResultsToPage(data) {
             var results = JSON.parse(data.poll);
+
+            addTotalToPage(results.length);
+
+
             for (var i = 0; i < results.length; i++){
-                $ol = $('<ul><ul>').addClass('results-set');
+                $ol = $('<ol><ol>').addClass('results-set');
                 var resultsSet = results[i];
                 for (var key in resultsSet) {
                     $ol.append("<li>" + key + ": " + resultsSet[key] + "</li>");
                 }
                 $('.results').append($ol);
             }
-        })
-</script>
+        }
+
+        $.getJSON('/api/polls/{{ id }}/results')
+            .done(addResultsToPage)
+    </script>
 </body>
 </html>
