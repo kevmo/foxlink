@@ -8,16 +8,28 @@
             rel="stylesheet"
             href="../static/bower_components/bootstrap/dist/css/bootstrap.css"
     />
+    <link
+            type="text/css"
+            rel="stylesheet"
+            href="../static/style.css"
+    />
 </head>
 <body>
-    <h1> Poll {{ id }}</h1>
-    <p>Do you want to subscribe?</p>
-    <button class="yes">Yes</button> <button class="no">No</button>
-    <br />
+    <div class="title">
+        <h1> Poll {{ id }}</h1>
+    </div>
+
+    <div class="content">
+        <h2>Do you want to subscribe?</h2>
+        <button class="yes">Yes</button> <button class="no">No</button>
+        <br />
+    </div>
+
+    <div class="subscribed"></div>
 
     <script>
         $('.no').on("click", function(){
-            alert("Then why are you even here.");
+            alert("Then why are you even here!");
         });
 
         $('.yes').on("click", function(){
@@ -25,9 +37,9 @@
             var apiURL = '/api/polls/subscribe/{{ id }}?' //email=' + email;
             $.post(apiURL)
                 .done(function(secret){
-                    var api_url = "Send GET and POST requests to this API URL to record query parameters:  http://localhost:5000/api/polls/{{ id }}"
-                    var url = "Go here to view results: http://localhost:5000/polls/{{ id }}/" + secret;
-                    $('body').append(api_url, "<br />", url)
+                    var api_url = "<p>Send GET and POST requests to this API URL to record query parameters:  http://localhost:5000/api/polls/{{ id }}</p>"
+                    var url = "<p>Go here to view results: http://localhost:5000/polls/{{ id }}/" + secret + "</p>";
+                    $('.subscribed').append(api_url, "<br />", url)
                 });
         })
 

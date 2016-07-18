@@ -1,0 +1,43 @@
+body {
+    text-align: center;
+    background-color: #F3F4F5;
+}
+
+.title {
+    text-transform: uppercase;
+    color: white;
+    letter-spacing: 5px;
+    background-color: #002F54;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    max-height: 200px;
+}
+
+h1 {
+    padding: 20px 0;
+}
+
+.content {
+    margin-top: 200px;
+}
+
+button {
+    width: 10vw;
+    border-radius: 7px;
+    color: white;
+    text-transform: uppercase;
+}
+
+button.yes {
+    background: darkgreen;
+}
+
+button.no {
+    background: indianred;
+}
+
+.subscribed {
+    margin-top: 5vh;
+
+}

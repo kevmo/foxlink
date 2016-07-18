@@ -19,3 +19,5 @@ Begin a new poll: http://localhost:5000/polls/new.  If you
 subscribe, the page will give you directions for API poll 
 result recording and viewing said poll results.
 
+Issues:
+* Needs error handling, particularly in API routes

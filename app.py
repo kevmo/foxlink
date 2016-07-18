@@ -1,14 +1,12 @@
 from flask import Flask, redirect, render_template, request, jsonify
 from flask_pymongo import PyMongo
-import json
-from bson.json_util import dumps, loads
-# from flask_sqlalchemy import SQLAlchemy
-# from flask_mail import Mail, Message
+from bson.json_util import dumps
 
-from utility import generateRandomString
 import config
+from utility import generateRandomString
 
 
+# Configuration
 app = Flask(__name__)
 app.config.from_object(config.DevelopmentConfig)
 mongo = PyMongo(app)
@@ -17,10 +15,8 @@ mongo = PyMongo(app)
 # FRONTEND ROUTES
 #
 
-
-#  Subscribe to poll results page
 @app.route('/polls/new')
-def hello():
+def generate_new_poll():
     # This is random enough that I don't need to check for pre-existence
     # of the ID before generating the page (for a toy app anyways).
     new_poll_id = generateRandomString(32)
@@ -38,18 +34,18 @@ def new_poll(id):
 def view_poll_results(id, secret):
 
     poll = mongo.db.polls.find_one_or_404({'_id': id})
+    # Checking secret --> would be better done as a decorator
     if secret == poll[u'secret']:
         return render_template('poll_results.html', id=id), 200
     else:
-        return "You don't belong here", 401
+        return "You don't belong here.", 401
 
 
 #
 # API ROUTES
 #
 
-# User subscribes to a poll,
-# generate secret
+
 # Skipping sending user an email because of time constraints, would otherwise use sendgrid.
 @app.route('/api/polls/subscribe/<id>', methods=['POST'])
 def subscribe(id):
@@ -81,8 +77,6 @@ def record_poll_results(id):
         {'_id': existing_poll[u'_id']},
         existing_poll
     )
-
-    print updated_poll
 
     return "Good"
 
