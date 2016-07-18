@@ -35,20 +35,24 @@
             $('.total').append(num);
         }
 
-        function addResultsToPage(data) {
-            var results = JSON.parse(data.poll);
-
-            addTotalToPage(results.length);
-
-
+        function addEachResultsSetToPage(results) {
             for (var i = 0; i < results.length; i++){
-                $ol = $('<ol><ol>').addClass('results-set');
                 var resultsSet = results[i];
+
+                $ol = $('<ol></ol>').addClass('results-set');
+
                 for (var key in resultsSet) {
                     $ol.append("<li>" + key + ": " + resultsSet[key] + "</li>");
                 }
+
                 $('.results').append($ol);
             }
+        }
+
+        function addResultsToPage(data) {
+            var results = JSON.parse(data.poll);
+            addTotalToPage(results.length);
+            addEachResultsSetToPage(results);
         }
 
         $.getJSON('/api/polls/{{ id }}/results')
